@@ -1,0 +1,66 @@
+# Edit this file to change niche/thresholds - no code changes needed.
+niche: fashion_beauty
+
+# Search queries sent to YouTube. More keywords = more candidates (100 quota units each page).
+keywords:
+  - skincare routine
+  - makeup tutorial
+  - fashion haul
+  - outfit ideas
+  - beauty review
+  - get ready with me
+  - capsule wardrobe
+  - hair care routine
+
+min_followers: 5000
+max_followers: 100000
+search_pages_per_keyword: 2      # 50 results per page
+target_candidates: 150           # stop discovering once we have this many in-range channels
+videos_to_analyze: 10            # recent videos used for engagement + themes
+region_code: null                # e.g. "IN", "US" to bias results
+relevance_language: en
+
+# Optional: look for a public contact email on the creator's own website (respects robots.txt)
+scrape_websites: false
+
+# ---- Filtering & classification (Stage 3) ----
+filtering:
+  allowed_platforms: [YouTube]
+  min_engagement_pct: 1.5          # mean (likes+comments)/views
+  max_days_since_upload: 60        # must be recently active
+  min_relevance_hits: 3            # niche-keyword hits across bio + recent titles + themes
+  allowed_countries: []            # [] = any; e.g. ["IN", "US"]. Unknown country is allowed but flagged.
+  brand_blocklist: [gambling, betting, casino, adult, nsfw, crypto giveaway]
+  niche_vocab:
+    beauty: [skincare, makeup, beauty, lipstick, foundation, serum, moisturizer, haircare, hair, nails,
+             cosmetics, glam, grwm, tutorial, concealer, mascara, sunscreen, fragrance, perfume]
+    fashion: [fashion, outfit, outfits, style, styling, haul, wardrobe, lookbook, ootd, thrift, denim,
+              clothing, streetwear, accessories, jewelry, saree, ethnic, trends]
+
+# ---- AI personalization (Stage 4) ----
+personalization:
+  provider: openai_compatible
+  base_url: https://api.groq.com/openai/v1
+  api_key_env: LLM_API_KEY
+  model: "openai/gpt-oss-120b"
+  request_delay_seconds: 2
+  max_retries: 5
+  email_words: [60, 90]
+  dm_words: [15, 30]
+  brand:
+    name: "Lumera"
+    product: "a clean-ingredient skincare and style brand"
+    offer: "a free product kit and a commission on sales through a personal code"
+  angle_by_tier:
+    nano: "barter collaboration (free product in exchange for honest content)"
+    micro: "affiliate campaign with a personal discount code, optionally UGC content"
+    upper-micro: "brand ambassador program with a free kit and a higher commission"
+
+# ---- Sending layer (Stage 5) ----
+sending:
+  db_path: data/outreach.db
+  max_per_run: 20
+  delay_seconds: 5
+  require_approval_live: true
+  suppression_file: data/suppression.txt
+  footer: "\n\nNot interested? Just reply 'no' and we won't contact you again."
